@@ -21,13 +21,15 @@ ECC 스프링 스터디 실습 코드 정리
 
 - `src/main/java/hello/hellospring` : 자바 코드. `HelloSpringApplication` 이 시작점
 - `src/main/java/hello/hellospring/controller` : 컨트롤러
+- `src/main/java/hello/hellospring/domain` : 회원 도메인
+- `src/main/java/hello/hellospring/repository` : 회원 리포지토리 인터페이스와 메모리 구현체
 - `src/main/resources/static` : 정적 컨텐츠. 파일 그대로 내려감
 - `src/main/resources/templates` : thymeleaf 템플릿. 컨트롤러가 반환한 이름으로 찾음
 - `src/test` : 테스트 코드. main 과 같은 패키지 구조로 만듦
 - `src/main/resources/application.properties` : 애플리케이션 설정
 - `build.gradle` : 스프링 부트 버전, 라이브러리 설정
 
-1~2강, 4강은 개념 위주라 실습 파일이 없음.
+1~2강, 4강, 10강은 개념 위주라 실습 파일이 없음.
 
 ## 실행
 
@@ -52,6 +54,21 @@ IDE 에서 서버를 켜둔 채로 jar 를 실행하면 8080 포트가 겹쳐서
 | 9강 | `localhost:8080/hello-string?name=spring` | `HelloController.helloString` | hello spring (HTML 태그 없음) |
 | 9강 | `localhost:8080/hello-api?name=spring` | `HelloController.helloApi` | `{"name":"spring"}` |
 
+## 테스트
+
+```bash
+./gradlew test
+```
+
+| 강 | 파일 | 내용 |
+| --- | --- | --- |
+| 12강 | `repository/MemoryMemberRepositoryTest` | save, findByName, findAll |
+
+스프링 없이 도는 단위 테스트라 금방 끝남.
+`./gradlew build` 도 테스트를 같이 돌림.
+
+IntelliJ 에서는 클래스나 패키지 단위로 한꺼번에 돌릴 수 있음.
+
 ## 정리
 
 - 1강: 스프링은 너무 방대해서 이론(IoC, DI, AOP)부터 하면 길을 잃음. 간단한 웹 애플리케이션을 직접 만들면서 큰 그림부터 잡는 강의
@@ -63,6 +80,9 @@ IDE 에서 서버를 켜둔 채로 jar 를 실행하면 8080 포트가 겹쳐서
 - 7강: 정적 컨텐츠. 컨트롤러를 먼저 찾아보고 없으면 `resources/static` 에서 파일을 찾아 그대로 반환함
 - 8강: MVC 와 템플릿 엔진. 뷰는 화면만, 컨트롤러는 로직만 담당하게 나눈 것. `@RequestParam` 으로 URL 파라미터를 받는데 `required` 기본값이 true 라서 안 넘기면 400 에러. thymeleaf 는 서버 없이 파일을 열어도 태그 안의 기본 글자(hello! empty)가 보임
 - 9강: `@ResponseBody` 를 붙이면 viewResolver 대신 HttpMessageConverter 가 동작해서 반환값을 HTTP body 에 직접 넣음. 문자는 `StringHttpMessageConverter` 가 그대로, 객체는 `MappingJackson2HttpMessageConverter` 가 JSON 으로 바꿔서 내려줌
+- 10강: 데이터는 회원ID, 이름. 기능은 회원 등록, 조회. 컨트롤러, 서비스, 리포지토리, 도메인으로 나누는 계층 구조. 저장소가 아직 안 정해졌다고 가정해서 리포지토리는 인터페이스로 만들고 구현체는 메모리로 시작
+- 11강: `Member`, `MemberRepository`, `MemoryMemberRepository`. null 이 나올 수 있는 조회는 `Optional` 로 감싸서 반환. 실무에서는 동시성 때문에 `ConcurrentHashMap`, `AtomicLong` 을 고려해야 함
+- 12강: JUnit 으로 테스트 작성. `assertThat(result).isEqualTo(member)`. 테스트 실행 순서는 보장되지 않아서 `@AfterEach` 로 매번 저장소를 비워야 함. 테스트는 서로 독립적이어야 함
 
 ## 강의와 다른 부분
 

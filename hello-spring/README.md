@@ -10,7 +10,7 @@ ECC 스프링 스터디 실습 코드 정리
 - [x] 섹션 1 강의 소개 (1~2강)
 - [x] 섹션 2 프로젝트 환경설정 (3~6강)
 - [x] 섹션 3 스프링 웹 개발 기초 (7~9강)
-- [ ] 섹션 4 회원 관리 예제 - 백엔드 개발 (10~14강)
+- [x] 섹션 4 회원 관리 예제 - 백엔드 개발 (10~14강)
 - [ ] 섹션 5 스프링 빈과 의존관계 (15~16강)
 - [ ] 섹션 6 회원 관리 예제 - 웹 MVC 개발 (17~19강)
 - [ ] 섹션 7 스프링 DB 접근 기술 (20~25강)
@@ -23,6 +23,7 @@ ECC 스프링 스터디 실습 코드 정리
 - `src/main/java/hello/hellospring/controller` : 컨트롤러
 - `src/main/java/hello/hellospring/domain` : 회원 도메인
 - `src/main/java/hello/hellospring/repository` : 회원 리포지토리 인터페이스와 메모리 구현체
+- `src/main/java/hello/hellospring/service` : 회원 서비스
 - `src/main/resources/static` : 정적 컨텐츠. 파일 그대로 내려감
 - `src/main/resources/templates` : thymeleaf 템플릿. 컨트롤러가 반환한 이름으로 찾음
 - `src/test` : 테스트 코드. main 과 같은 패키지 구조로 만듦
@@ -63,8 +64,9 @@ IDE 에서 서버를 켜둔 채로 jar 를 실행하면 8080 포트가 겹쳐서
 | 강 | 파일 | 내용 |
 | --- | --- | --- |
 | 12강 | `repository/MemoryMemberRepositoryTest` | save, findByName, findAll |
+| 14강 | `service/MemberServiceTest` | 회원가입, 중복_회원_예외 |
 
-스프링 없이 도는 단위 테스트라 금방 끝남.
+둘 다 스프링 없이 도는 단위 테스트라 금방 끝남.
 `./gradlew build` 도 테스트를 같이 돌림.
 
 IntelliJ 에서는 클래스나 패키지 단위로 한꺼번에 돌릴 수 있음.
@@ -83,6 +85,8 @@ IntelliJ 에서는 클래스나 패키지 단위로 한꺼번에 돌릴 수 있�
 - 10강: 데이터는 회원ID, 이름. 기능은 회원 등록, 조회. 컨트롤러, 서비스, 리포지토리, 도메인으로 나누는 계층 구조. 저장소가 아직 안 정해졌다고 가정해서 리포지토리는 인터페이스로 만들고 구현체는 메모리로 시작
 - 11강: `Member`, `MemberRepository`, `MemoryMemberRepository`. null 이 나올 수 있는 조회는 `Optional` 로 감싸서 반환. 실무에서는 동시성 때문에 `ConcurrentHashMap`, `AtomicLong` 을 고려해야 함
 - 12강: JUnit 으로 테스트 작성. `assertThat(result).isEqualTo(member)`. 테스트 실행 순서는 보장되지 않아서 `@AfterEach` 로 매번 저장소를 비워야 함. 테스트는 서로 독립적이어야 함
+- 13강: `MemberService`. 같은 이름이 있으면 `ifPresent` 에서 `IllegalStateException` 을 던짐. 서비스 메서드 이름은 `join` 처럼 비즈니스 용어로 지음
+- 14강: given, when, then 으로 나눠서 작성. 예외는 `assertThrows` 로 검증. 서비스가 리포지토리를 직접 new 하지 않고 생성자로 받게 바꿈 (DI). `@BeforeEach` 에서 매번 새로 만들어 넣어줌
 
 ## 강의와 다른 부분
 
@@ -93,3 +97,4 @@ IntelliJ 에서는 클래스나 패키지 단위로 한꺼번에 돌릴 수 있�
 - 테스트 의존성에서 `junit-vintage-engine` 을 exclude 하던 부분이 없어짐. 지금은 JUnit5 만 들어옴
 - `/hello-mvc` 를 파라미터 없이 호출하면 화면에는 400 Bad Request 만 나오고, 원인은 콘솔 로그에 나옴. 메시지도 `Required request parameter 'name' for method parameter type String is not present` 로 강의와 조금 다름
 - 지금 start.spring.io 에서 artifact 를 `hello-spring` 으로 만들면 패키지가 `hello.hello_spring` 으로 잡힘. 강의와 맞추려고 `hello.hellospring` 으로 씀
+- 교안의 `MemberServiceTest` 에는 `AfterEach` import 가 빠져 있어서 추가함

@@ -1,8 +1,14 @@
 package hello.hellospring.controller;
 
+import hello.hellospring.domain.Member;
 import hello.hellospring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 // 15강 컴포넌트 스캔과 자동 의존관계 설정
 // @Controller 가 있으면 스프링이 뜰 때 이 객체를 만들어서 스프링 컨테이너에 넣고 관리함
@@ -19,5 +25,35 @@ public class MemberController {
     @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
+    }
+
+    // 18강 회원 등록 폼
+    // 주소창에 치고 들어오는 건 GET. templates/members/createMemberForm.html 을 보여줌
+    @GetMapping(value = "/members/new")
+    public String createForm() {
+        return "members/createMemberForm";
+    }
+
+    // 18강 회원 등록
+    // 주소는 같지만 form 의 method="post" 로 넘어와서 이쪽이 호출됨
+    // 조회는 GET, 데이터를 등록할 때는 POST
+    @PostMapping(value = "/members/new")
+    public String create(MemberForm form) {
+        Member member = new Member();
+        member.setName(form.getName());
+
+        memberService.join(member);
+
+        // 가입이 끝나면 홈 화면으로 보냄
+        return "redirect:/";
+    }
+
+    // 19강 회원 조회
+    @GetMapping(value = "/members")
+    public String list(Model model) {
+        List<Member> members = memberService.findMembers();
+        // 리스트를 통째로 모델에 담아서 화면으로 넘김
+        model.addAttribute("members", members);
+        return "members/memberList";
     }
 }

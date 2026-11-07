@@ -12,7 +12,7 @@ ECC 스프링 스터디 실습 코드 정리
 - [x] 섹션 3 스프링 웹 개발 기초 (7~9강)
 - [x] 섹션 4 회원 관리 예제 - 백엔드 개발 (10~14강)
 - [x] 섹션 5 스프링 빈과 의존관계 (15~16강)
-- [ ] 섹션 6 회원 관리 예제 - 웹 MVC 개발 (17~19강)
+- [x] 섹션 6 회원 관리 예제 - 웹 MVC 개발 (17~19강)
 - [ ] 섹션 7 스프링 DB 접근 기술 (20~25강)
 - [ ] 섹션 8 AOP (26~27강)
 - [ ] 섹션 9 다음으로 (28강)
@@ -20,7 +20,7 @@ ECC 스프링 스터디 실습 코드 정리
 ## 폴더
 
 - `src/main/java/hello/hellospring` : 자바 코드. `HelloSpringApplication` 이 시작점
-- `src/main/java/hello/hellospring/controller` : 컨트롤러
+- `src/main/java/hello/hellospring/controller` : 컨트롤러, 폼 객체 (`MemberForm`)
 - `src/main/java/hello/hellospring/domain` : 회원 도메인
 - `src/main/java/hello/hellospring/repository` : 회원 리포지토리 인터페이스와 메모리 구현체
 - `src/main/java/hello/hellospring/service` : 회원 서비스
@@ -49,12 +49,18 @@ IDE 에서 서버를 켜둔 채로 jar 를 실행하면 8080 포트가 겹쳐서
 
 | 강 | 주소 | 파일 | 결과 |
 | --- | --- | --- | --- |
-| 5강 | `localhost:8080` | `static/index.html` | Welcome Page |
+| 5강 | `localhost:8080/index.html` | `static/index.html` | Welcome Page. 17강부터 `localhost:8080` 은 홈 화면이 나와서 Welcome Page 는 `/index.html` 로 봐야 함 |
 | 5강 | `localhost:8080/hello` | `HelloController.hello`, `templates/hello.html` | 안녕하세요. hello!! |
 | 7강 | `localhost:8080/hello-static.html` | `static/hello-static.html` | 정적 컨텐츠 입니다. |
 | 8강 | `localhost:8080/hello-mvc?name=spring` | `HelloController.helloMvc`, `templates/hello-template.html` | hello spring |
 | 9강 | `localhost:8080/hello-string?name=spring` | `HelloController.helloString` | hello spring (HTML 태그 없음) |
 | 9강 | `localhost:8080/hello-api?name=spring` | `HelloController.helloApi` | `{"name":"spring"}` |
+| 17강 | `localhost:8080` | `HomeController.home`, `templates/home.html` | 회원 가입, 회원 목록 링크 |
+| 18강 | `localhost:8080/members/new` | `MemberController.createForm`, `create`, `templates/members/createMemberForm.html` | 이름 입력하고 등록하면 홈으로 돌아옴 |
+| 19강 | `localhost:8080/members` | `MemberController.list`, `templates/members/memberList.html` | 등록한 회원 목록 |
+
+회원 데이터는 메모리에 저장해서 서버를 껐다 켜면 다 사라짐.
+같은 이름으로 두 번 가입하면 `IllegalStateException` 이 나면서 500 에러 화면이 나옴.
 
 ## 테스트
 
@@ -90,6 +96,9 @@ IntelliJ 에서는 클래스나 패키지 단위로 한꺼번에 돌릴 수 있�
 - 14강: given, when, then 으로 나눠서 작성. 예외는 `assertThrows` 로 검증. 서비스가 리포지토리를 직접 new 하지 않고 생성자로 받게 바꿈 (DI). `@BeforeEach` 에서 매번 새로 만들어 넣어줌
 - 15강: `@Controller`, `@Service`, `@Repository` 는 `@Component` 를 포함해서 컴포넌트 스캔으로 스프링 빈이 됨. 생성자에 `@Autowired` 가 있으면 스프링이 컨테이너에서 찾아서 넣어줌. 스캔 범위는 메인 클래스 패키지와 그 하위. 스프링 빈은 기본이 싱글톤
 - 16강: `@Configuration` 클래스의 `@Bean` 메서드로 직접 등록. 구현 클래스를 바꿔야 하면 이 방식이 좋음. 설정 파일만 고치면 됨. DI 는 필드, setter, 생성자 주입이 있는데 생성자 주입을 권장. `@Autowired` 는 스프링이 관리하는 객체에서만 동작함
+- 17강: `HomeController` 가 `/` 를 받아서 `home.html` 을 보여줌. 컨트롤러가 정적 파일보다 우선순위가 높아서 `static/index.html` 은 무시됨
+- 18강: GET `/members/new` 는 폼 화면, POST `/members/new` 는 등록. 폼의 `name="name"` 값이 `MemberForm` 에 담겨서 들어옴. 등록 후 `redirect:/`
+- 19강: `findMembers()` 결과를 모델에 `members` 로 담고 템플릿에서 `th:each` 로 반복 출력. `${member.name}` 은 `getName()` 으로 값을 가져옴
 
 ## 강의와 다른 부분
 
@@ -102,3 +111,4 @@ IntelliJ 에서는 클래스나 패키지 단위로 한꺼번에 돌릴 수 있�
 - 지금 start.spring.io 에서 artifact 를 `hello-spring` 으로 만들면 패키지가 `hello.hello_spring` 으로 잡힘. 강의와 맞추려고 `hello.hellospring` 으로 씀
 - 교안의 `MemberServiceTest` 에는 `AfterEach` import 가 빠져 있어서 추가함
 - 15강에서 붙였던 `@Service`, `@Repository`, 서비스 생성자의 `@Autowired` 는 16강에서 `SpringConfig` 로 바꾸면서 뺌. 코드는 16강 이후 상태고, 뺀 자리는 주석으로 남겨둠
+- 교안에는 홈 화면 파일이 `hello.html` 로 적혀 있는데 컨트롤러가 `home` 을 반환해서 `home.html` 로 만듦

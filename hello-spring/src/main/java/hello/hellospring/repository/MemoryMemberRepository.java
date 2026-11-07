@@ -8,6 +8,8 @@ import java.util.*;
  * 동시성 문제가 고려되어 있지 않음, 실무에서는 ConcurrentHashMap, AtomicLong 사용 고려
  */
 // 11강 회원 리포지토리 메모리 구현체
+// 15강 컴포넌트 스캔 방식에서는 여기에 @Repository 를 붙였음
+// 16강부터는 SpringConfig 에서 @Bean 으로 직접 등록해서 애노테이션을 뺌
 public class MemoryMemberRepository implements MemberRepository {
 
     // key 는 회원 id, value 는 회원

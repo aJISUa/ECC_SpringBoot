@@ -9,6 +9,9 @@ import java.util.Optional;
 // 13강 회원 서비스
 // 리포지토리는 save, findById 처럼 저장소에 넣고 빼는 이름을 쓰고
 // 서비스는 join, findMembers 처럼 비즈니스에 가까운 이름을 씀
+//
+// 15강 컴포넌트 스캔 방식에서는 클래스에 @Service, 생성자에 @Autowired 를 붙였음
+// 16강부터는 SpringConfig 에서 @Bean 으로 직접 등록해서 애노테이션을 뺌
 public class MemberService {
 
     // 13강에서는 new MemoryMemberRepository() 로 직접 만들었음

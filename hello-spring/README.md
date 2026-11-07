@@ -11,7 +11,7 @@ ECC 스프링 스터디 실습 코드 정리
 - [x] 섹션 2 프로젝트 환경설정 (3~6강)
 - [x] 섹션 3 스프링 웹 개발 기초 (7~9강)
 - [x] 섹션 4 회원 관리 예제 - 백엔드 개발 (10~14강)
-- [ ] 섹션 5 스프링 빈과 의존관계 (15~16강)
+- [x] 섹션 5 스프링 빈과 의존관계 (15~16강)
 - [ ] 섹션 6 회원 관리 예제 - 웹 MVC 개발 (17~19강)
 - [ ] 섹션 7 스프링 DB 접근 기술 (20~25강)
 - [ ] 섹션 8 AOP (26~27강)
@@ -24,6 +24,7 @@ ECC 스프링 스터디 실습 코드 정리
 - `src/main/java/hello/hellospring/domain` : 회원 도메인
 - `src/main/java/hello/hellospring/repository` : 회원 리포지토리 인터페이스와 메모리 구현체
 - `src/main/java/hello/hellospring/service` : 회원 서비스
+- `src/main/java/hello/hellospring/SpringConfig.java` : 스프링 빈 직접 등록
 - `src/main/resources/static` : 정적 컨텐츠. 파일 그대로 내려감
 - `src/main/resources/templates` : thymeleaf 템플릿. 컨트롤러가 반환한 이름으로 찾음
 - `src/test` : 테스트 코드. main 과 같은 패키지 구조로 만듦
@@ -87,6 +88,8 @@ IntelliJ 에서는 클래스나 패키지 단위로 한꺼번에 돌릴 수 있�
 - 12강: JUnit 으로 테스트 작성. `assertThat(result).isEqualTo(member)`. 테스트 실행 순서는 보장되지 않아서 `@AfterEach` 로 매번 저장소를 비워야 함. 테스트는 서로 독립적이어야 함
 - 13강: `MemberService`. 같은 이름이 있으면 `ifPresent` 에서 `IllegalStateException` 을 던짐. 서비스 메서드 이름은 `join` 처럼 비즈니스 용어로 지음
 - 14강: given, when, then 으로 나눠서 작성. 예외는 `assertThrows` 로 검증. 서비스가 리포지토리를 직접 new 하지 않고 생성자로 받게 바꿈 (DI). `@BeforeEach` 에서 매번 새로 만들어 넣어줌
+- 15강: `@Controller`, `@Service`, `@Repository` 는 `@Component` 를 포함해서 컴포넌트 스캔으로 스프링 빈이 됨. 생성자에 `@Autowired` 가 있으면 스프링이 컨테이너에서 찾아서 넣어줌. 스캔 범위는 메인 클래스 패키지와 그 하위. 스프링 빈은 기본이 싱글톤
+- 16강: `@Configuration` 클래스의 `@Bean` 메서드로 직접 등록. 구현 클래스를 바꿔야 하면 이 방식이 좋음. 설정 파일만 고치면 됨. DI 는 필드, setter, 생성자 주입이 있는데 생성자 주입을 권장. `@Autowired` 는 스프링이 관리하는 객체에서만 동작함
 
 ## 강의와 다른 부분
 
@@ -98,3 +101,4 @@ IntelliJ 에서는 클래스나 패키지 단위로 한꺼번에 돌릴 수 있�
 - `/hello-mvc` 를 파라미터 없이 호출하면 화면에는 400 Bad Request 만 나오고, 원인은 콘솔 로그에 나옴. 메시지도 `Required request parameter 'name' for method parameter type String is not present` 로 강의와 조금 다름
 - 지금 start.spring.io 에서 artifact 를 `hello-spring` 으로 만들면 패키지가 `hello.hello_spring` 으로 잡힘. 강의와 맞추려고 `hello.hellospring` 으로 씀
 - 교안의 `MemberServiceTest` 에는 `AfterEach` import 가 빠져 있어서 추가함
+- 15강에서 붙였던 `@Service`, `@Repository`, 서비스 생성자의 `@Autowired` 는 16강에서 `SpringConfig` 로 바꾸면서 뺌. 코드는 16강 이후 상태고, 뺀 자리는 주석으로 남겨둠

@@ -2,6 +2,7 @@ package hello.hellospring.service;
 
 import hello.hellospring.domain.Member;
 import hello.hellospring.repository.MemberRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,11 @@ import java.util.Optional;
 //
 // 15강 컴포넌트 스캔 방식에서는 클래스에 @Service, 생성자에 @Autowired 를 붙였음
 // 16강부터는 SpringConfig 에서 @Bean 으로 직접 등록해서 애노테이션을 뺌
+//
+// 24강 JPA 를 통한 모든 데이터 변경은 트랜잭션 안에서 실행해야 함
+// @Transactional 이 있으면 메서드를 실행할 때 트랜잭션을 시작하고, 정상 종료되면 커밋함
+// 런타임 예외가 발생하면 롤백함
+@Transactional
 public class MemberService {
 
     // 13강에서는 new MemoryMemberRepository() 로 직접 만들었음

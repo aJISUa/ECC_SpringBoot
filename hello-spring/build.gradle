@@ -25,6 +25,8 @@ dependencies {
 	// 24강: data-jpa 가 내부에 jdbc 를 포함해서 jdbc 는 주석 처리함
 //	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// 27강: @Aspect 를 쓰려면 필요한 AOP 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	// DB 가 제공하는 클라이언트(드라이버). 실행할 때만 필요함
 	runtimeOnly 'com.h2database:h2'
 	// 테스트 라이브러리는 기본으로 들어감 (JUnit5, mockito, assertj, spring-test)

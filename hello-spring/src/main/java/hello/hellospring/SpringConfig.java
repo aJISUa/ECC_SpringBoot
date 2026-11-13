@@ -51,4 +51,7 @@ public class SpringConfig {
     //     return new JdbcTemplateMemberRepository(dataSource);    // 23강 JdbcTemplate
     //     return new JpaMemberRepository(em);                     // 24강 JPA
     // }
+
+    // 27강: AOP 를 @Component 대신 여기서 @Bean 으로 등록할 수도 있음
+    // 지금은 TimeTraceAop 에 @Component 를 붙여서 컴포넌트 스캔으로 등록함
 }

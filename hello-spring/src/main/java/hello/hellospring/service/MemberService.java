@@ -32,6 +32,11 @@ public class MemberService {
      * 회원가입
      */
     public Long join(Member member) {
+        // 26강에서는 여기에 시간 측정 코드를 직접 넣었음
+        //   long start = System.currentTimeMillis();
+        //   try { ... } finally { System.out.println("join " + (finish - start) + "ms"); }
+        // 핵심 로직과 섞여서 유지보수가 어렵고, 메서드마다 다 넣어야 함
+        // 27강에서 TimeTraceAop 로 빼내고 여기는 원래대로 되돌림
         validateDuplicateMember(member); //중복 회원 검증
         memberRepository.save(member);
         return member.getId();

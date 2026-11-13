@@ -25,6 +25,9 @@ public class MemberController {
     @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
+        // 27강: AOP 를 적용하면 진짜 MemberService 가 아니라 프록시(가짜)가 주입됨
+        // 찍어보면 MemberService$$SpringCGLIB$$0 처럼 뒤에 뭔가 붙어서 나옴
+        System.out.println("memberService = " + memberService.getClass());
     }
 
     // 18강 회원 등록 폼

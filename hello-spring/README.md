@@ -14,8 +14,8 @@ ECC 스프링 스터디 실습 코드 정리
 - [x] 섹션 5 스프링 빈과 의존관계 (15~16강)
 - [x] 섹션 6 회원 관리 예제 - 웹 MVC 개발 (17~19강)
 - [x] 섹션 7 스프링 DB 접근 기술 (20~25강)
-- [ ] 섹션 8 AOP (26~27강)
-- [ ] 섹션 9 다음으로 (28강)
+- [x] 섹션 8 AOP (26~27강)
+- [x] 섹션 9 다음으로 (28강)
 
 ## 폴더
 
@@ -23,6 +23,7 @@ ECC 스프링 스터디 실습 코드 정리
 - `src/main/java/hello/hellospring/controller` : 컨트롤러, 폼 객체 (`MemberForm`)
 - `src/main/java/hello/hellospring/domain` : 회원 도메인
 - `src/main/java/hello/hellospring/repository` : 회원 리포지토리 인터페이스와 구현체 5개 (메모리, 순수 JDBC, JdbcTemplate, JPA, 스프링 데이터 JPA)
+- `src/main/java/hello/hellospring/aop` : 시간 측정 AOP
 - `src/main/java/hello/hellospring/service` : 회원 서비스
 - `src/main/java/hello/hellospring/SpringConfig.java` : 스프링 빈 직접 등록
 - `src/main/resources/static` : 정적 컨텐츠. 파일 그대로 내려감
@@ -32,7 +33,8 @@ ECC 스프링 스터디 실습 코드 정리
 - `sql/ddl.sql` : member 테이블 만드는 SQL
 - `build.gradle` : 스프링 부트 버전, 라이브러리 설정
 
-1~2강, 4강, 10강은 개념 위주라 실습 파일이 없음.
+1~2강, 4강, 10강, 28강은 개념 위주라 실습 파일이 없음.
+26강의 시간 측정 코드는 27강에서 AOP 로 옮기면서 지워서 `MemberService` 에 주석으로만 남겨둠.
 
 ## DB 준비
 
@@ -76,7 +78,7 @@ IDE 에서 서버를 켜둔 채로 jar 를 실행하면 8080 포트가 겹쳐서
 
 회원 데이터는 19강까지는 메모리에 저장해서 서버를 껐다 켜면 다 사라졌음.
 21강부터는 DB 에 저장해서 서버를 다시 켜도 남아 있음.
-화면을 열 때마다 콘솔에 Hibernate SQL 이 나옴.
+화면을 열 때마다 콘솔에 AOP 가 찍는 START, END 로그와 Hibernate SQL 이 나옴.
 같은 이름으로 두 번 가입하면 `IllegalStateException` 이 나면서 500 에러 화면이 나옴.
 
 ## 테스트
@@ -124,6 +126,9 @@ IntelliJ 에서는 클래스나 패키지 단위로 한꺼번에 돌릴 수 있�
 - 23강: JdbcTemplate. 반복 코드는 없어지지만 SQL 은 직접 써야 함. `query(SQL, RowMapper, 파라미터)`, insert 는 `SimpleJdbcInsert`
 - 24강: JPA. `@Entity`, `@Id`, `@GeneratedValue(IDENTITY)` 로 매핑하면 SQL 을 JPA 가 만들어줌. `EntityManager` 의 `persist`, `find` 를 쓰고 PK 가 아닌 조회는 JPQL. 데이터 변경은 트랜잭션 안에서 해야 해서 서비스에 `@Transactional`
 - 25강: 스프링 데이터 JPA. `JpaRepository<Member, Long>` 을 상속한 인터페이스만 만들면 구현체를 만들어서 빈으로 등록해줌. `findByName` 처럼 메서드 이름만으로 조회. JPA 를 먼저 공부하고 써야 함
+- 26강: 모든 메서드의 호출 시간을 재려면 메서드마다 같은 코드를 넣어야 함. 시간 측정은 공통 관심 사항, 회원가입은 핵심 관심 사항인데 둘이 섞여서 유지보수가 어려움
+- 27강: AOP. `@Aspect` 클래스에 `@Around` 로 적용 대상을 정하고 `joinPoint.proceed()` 로 진짜 메서드를 호출. 스프링은 프록시(가짜 객체)를 대신 주입하는 방식으로 동작함. DI 를 쓰니까 가능한 것
+- 28강: 지금까지는 얇고 넓게 배운 것. 스프링의 모든 걸 알 필요는 없고 핵심 원리를 이해해서 문제가 생겼을 때 어디서부터 찾을지 아는 게 중요
 
 ## 강의와 다른 부분
 
@@ -140,3 +145,5 @@ IntelliJ 에서는 클래스나 패키지 단위로 한꺼번에 돌릴 수 있�
 - 강의는 H2 1.4.200 을 쓰는데 스프링 부트 3.x 는 2.1.214 이상이어야 함
 - JPA 관련 import 는 `javax.persistence` 가 아니라 `jakarta.persistence`. `javax.sql.DataSource` 는 그대로
 - `SpringConfig` 는 25강 이후 상태. 16~24강 버전은 주석으로 남겨둠
+- `build.gradle` 에 `spring-boot-starter-aop` 를 직접 추가함
+- AOP 프록시 클래스 이름이 강의는 `MemberService$$EnhancerBySpringCGLIB$$...`, 지금은 `MemberService$$SpringCGLIB$$0` 으로 찍힘
